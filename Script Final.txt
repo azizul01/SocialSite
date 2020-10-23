@@ -1,0 +1,380 @@
+***** At first create UserInformation Table. After user create then login Use User ID & Password. ****
+
+INSERT INTO [dbo].[UserInformation]
+           ([UserID]
+           ,[UserName]
+           ,[UserEmail]
+           ,[Password] 
+           ,[CreatedBy]
+           )
+     VALUES
+           ('101012'
+           ,'Md. Azizul Huq'
+           ,'mdazizulhoque.bd@gmail.com'
+           ,'1C-4D-C3-D8-0C-10-48-06-A1-70-44-AF-A1-71-CB-7B'           
+           ,'101012'
+            )
+
+User ID = 101012
+Password : dbl
+--------------------------------------------------
+
+CREATE PROCEDURE [dbo].[spSet_PostInformation] (
+	@SaveOption Int = -1, 
+	@PostID Int = -1,
+	@PostHead Varchar(2000) = '',  
+	@PostImage Varchar(100) = '',  
+	@IsActive Int = -1,  
+	@UserBy varchar(100) = -1, 
+	@IdentityValue Int OutPut,
+	@ErrNo int output  
+)
+AS
+
+Begin Transaction
+
+	BEGIN
+		Declare @Insert Int = 1, @Update Int = 2, @Delete Int = 3;
+
+		SET @IdentityValue = 0; Set @ErrNo = 0;  
+
+		IF(@SaveOption = @Insert) -- 1 
+		BEGIN  
+			Insert into PostInformation(PostHead, PostImage, CreatedBy) 
+			Values(@PostHead, @PostImage, @UserBy) 
+			 
+			SET @IdentityValue = @@IDENTITY
+			If @@Error !=0
+			Begin 
+				Rollback Transaction 
+				Set @ErrNo = -1 
+			End
+		END
+
+		IF(@SaveOption = @Update) -- 2
+		BEGIN   
+			Update PostInformation Set 
+			PostHead = @PostHead, 
+			PostImage = @PostImage, 
+			IsActive = @IsActive, 
+			UpdatedBy = @UserBy
+			Where PostID = @PostID
+
+			SET @IdentityValue = @PostID
+			If @@Error !=0
+			Begin 
+				Rollback Transaction 
+				Set @ErrNo = -1 
+			End 
+		END  
+
+		IF(@SaveOption = @Delete) -- 2
+		BEGIN   
+			Update PostInformation Set IsActive = 0  Where PostID = @PostID
+
+			SET @IdentityValue = @PostID
+			If @@Error !=0
+			Begin 
+				Rollback Transaction 
+				Set @ErrNo = -1 
+			End 
+		END  
+	END
+
+Commit Transaction 
+GO
+--------------------------------------- 
+ 
+CREATE PROCEDURE [dbo].[spSet_PostFeedback] (
+	@SaveOption Int = -1, 
+	@PostFeedbackID Int = -1,
+	@PostID Int = -1, 
+	@PostComment Varchar(2000) = '',  
+	@PostLike Int = -1, 
+	@PostDislike Int = -1, 
+	@IsActive Int = -1,  
+	@UserBy varchar(100) = -1, 
+	@IdentityValue Int OutPut,
+	@ErrNo int output  
+)
+AS
+
+Begin Transaction
+
+	BEGIN
+		Declare @Insert Int = 1, @Update Int = 2, @Delete Int = 3;
+
+		SET @IdentityValue = 0; Set @ErrNo = 0;  
+
+		IF(@SaveOption = @Insert) -- 1 
+		BEGIN  
+			If exists(Select * from PostFeedback Where CreatedBy = @UserBy And PostID = @PostID )
+			Begin  
+				If @PostLike = 1 
+				Begin
+					Update PostFeedback Set PostLike = @PostLike, PostDislike = @PostDislike Where CreatedBy = @UserBy And PostID = @PostID
+
+					SET @IdentityValue = @PostID
+					If @@Error !=0
+					Begin 
+						Rollback Transaction 
+						Set @ErrNo = -1 
+					End
+				End
+
+				If @PostDislike = 1 
+				Begin
+					Update PostFeedback Set PostLike = @PostLike, PostDislike = @PostDislike Where CreatedBy = @UserBy And PostID = @PostID
+
+					SET @IdentityValue = @PostID
+					If @@Error !=0
+					Begin 
+						Rollback Transaction 
+						Set @ErrNo = -1 
+					End
+				End
+
+				If @PostComment != '' 
+				Begin
+					Update PostFeedback Set PostComment = @PostComment Where CreatedBy = @UserBy And PostID = @PostID
+
+					SET @IdentityValue = @PostID
+					If @@Error !=0
+					Begin 
+						Rollback Transaction 
+						Set @ErrNo = -1 
+					End
+				End 
+			End
+
+			ELSE
+			Begin
+				If @PostLike = 1 
+				Begin
+					Set @PostDislike = 0
+				End
+
+				Else If @PostDislike = 1 
+				Begin
+					Set @PostLike = 0
+				End
+
+				Insert into PostFeedback(PostID, PostComment, PostLike, PostDislike, CreatedBy) 
+				Values(@PostID, @PostComment, @PostLike, @PostDislike, @UserBy) 
+			 
+				SET @IdentityValue = @@IDENTITY
+				If @@Error !=0
+				Begin 
+					Rollback Transaction 
+					Set @ErrNo = -1 
+				End
+			End
+		END
+
+		IF(@SaveOption = @Update) -- 2
+		BEGIN   
+			Update PostFeedback Set 
+			PostComment = @PostComment, 
+			PostLike = @PostLike, 
+			PostDislike = @PostDislike, 
+			IsActive = @IsActive, 
+			UpdatedBy = @UserBy
+			Where PostFeedbackID = @PostFeedbackID
+
+			SET @IdentityValue = @PostFeedbackID
+			If @@Error !=0
+			Begin 
+				Rollback Transaction 
+				Set @ErrNo = -1 
+			End 
+		END  
+
+		IF(@SaveOption = @Delete) -- 2
+		BEGIN   
+			Update PostFeedback Set IsActive = 0  Where PostFeedbackID = @PostFeedbackID and CreatedBy = @UserBy
+
+			SET @IdentityValue = @PostFeedbackID
+			If @@Error !=0
+			Begin 
+				Rollback Transaction 
+				Set @ErrNo = -1 
+			End 
+		END  
+	END
+
+Commit Transaction
+ 
+GO
+--------------------------------- 
+ 
+CREATE PROCEDURE [dbo].[spGet_PostInformation] (
+	@LoadOption AS Int = -1, 
+	@PostID Int = -1,
+	@IsActive Int = -1
+)
+AS
+
+BEGIN 
+	Declare @LoadPostInformation Int = 1, 
+			@LoadPostDetails Int =2,
+			@LoadPostFeedBack Int = 3  
+	 
+	IF(@LoadOption = @LoadPostInformation) -- 1
+	BEGIN  
+		Select pif.PostID, pif.PostHead, pif.PostImage, pif.IsActive, (Case When pif.IsActive = 1 Then 'Active' Else 'Inactive' End)[Status],
+		pif.CreatedBy, ui.UserName As CreatedUserName, pif.CreatedDate, pif.UpdatedBy, ui.UserName As UpdatedUserName, pif.UpdatedDate 
+		From PostInformation pif Inner Join UserInformation ui On pif.CreatedBy = ui.UserID
+		Inner Join PostFeedback pf On pf.PostID = pif.PostID
+		Where pif.PostID = (Case When @PostID = -1 Then pif.PostID Else @PostID End) 
+		AND pif.IsActive = (Case When @IsActive = -1 Then pif.IsActive Else @IsActive End)
+		Order By PostID
+	END 
+	IF(@LoadOption = @LoadPostDetails) -- 1
+	BEGIN  
+		Select pif.PostID, pif.PostHead, pif.PostImage, pif.IsActive, (Case When pif.IsActive = 1 Then 'Active' Else 'Inactive' End)[Status],
+		pif.CreatedBy As PostCreatedBy, pif.CreatedDate As PostCreatedDate, pif.UpdatedBy As PostUpdatedBy, pif.UpdatedDate As PostUpdatedDate,
+
+		pf.PostFeedbackID, pf.PostComment, pf.PostLike, pf.PostDislike,  pf.CreatedBy As PFCreatedBy, 
+		pf.CreatedDate As PFCreatedDate, pf.UpdatedBy As PFUpdatedBy, pf.UpdatedDate As PFUpdatedDate
+
+		From PostInformation pif Left Join PostFeedback pf On pif.PostID = pf.PostID 
+		Where pif.PostID = (Case When @PostID = -1 Then pif.PostID Else @PostID End) 
+		AND pif.IsActive = (Case When @IsActive = -1 Then pif.IsActive Else @IsActive End)
+		Order By pif.PostID
+	END 
+	
+	IF(@LoadOption = @LoadPostFeedBack) -- 1
+	BEGIN   
+		Select pif.PostID, pif.PostHead, pif.PostImage, pif.CreatedBy As PostCreatedBy, ui.UserName As PostCreatedUserName,  
+		pif.CreatedBy As PostFeedBackCreatedBy, ui2.UserName As PostFeedBackUserName, 
+		Count(Isnull(pf.PostDislike,0))PostDislike, Count(Isnull(pf.PostLike,0))PostLike, pf.PostComment, 0 As PostFeedbackID
+		From PostInformation pif Inner Join UserInformation ui On pif.CreatedBy = ui.UserID
+		Inner Join PostFeedback pf On pf.PostID = pif.PostID
+		Inner Join UserInformation ui2 On pif.CreatedBy = ui2.UserID 
+		Where pif.PostID = (Case When @PostID = -1 Then pif.PostID Else @PostID End) 
+		AND pif.IsActive = (Case When @IsActive = -1 Then pif.IsActive Else @IsActive End)
+	 
+		group by pif.PostID, pif.PostHead, pif.PostImage, pif.CreatedBy, ui.UserName,  
+		pif.CreatedBy, ui2.UserName, pf.PostComment--, pf.PostFeedbackID
+		Order By pif.PostID 
+	END 
+END  
+GO
+----------------------------------------------------- 
+
+Create PROCEDURE [dbo].[spGet_PostFeedback] (
+	@LoadOption AS Int = -1, 
+	@PostFeedbackID Int = -1,
+	@PostID Int = -1,
+	@IsActive Int = -1
+)
+AS
+
+BEGIN 
+	Declare @LoadPostFeedback Int = 1,
+			@LoadPostCount Int = 2  
+	 
+	IF(@LoadOption = @LoadPostFeedback) -- 1
+	BEGIN  
+		Select PostFeedbackID, PostID, PostComment, PostLike, PostDislike, IsActive,  
+		(Case When IsActive = 1 Then 'Active' Else 'Inactive' End)[Status], CreatedBy, 
+		CreatedDate, UpdatedBy, UpdatedDate
+		From PostFeedback
+		Where PostFeedbackID = (Case When @PostFeedbackID = -1 Then PostFeedbackID Else @PostFeedbackID End) 
+		AND IsActive = (Case When @IsActive = -1 Then IsActive Else @IsActive End)
+		Order By PostFeedbackID
+	END 
+
+	IF(@LoadOption = @LoadPostCount) -- 1
+	BEGIN  
+		Select Sum(IsNull(PostLike,0))PostLike, Sum(IsNull(PostDislike,0))PostDislike   
+		From PostFeedback
+		Where PostID = (Case When @PostID = -1 Then PostID Else @PostID End) 
+		AND IsActive = 1 
+	END
+END 
+
+ GO 
+--------------------------------------------------  
+
+CREATE TABLE [dbo].[UserInformation](
+	[UserInformationID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [varchar](20) NOT NULL,
+	[UserName] [varchar](100) NOT NULL,
+	[UserEmail] [varchar](256) NOT NULL,
+	[Password] [varchar](200) NOT NULL,
+	[IsActive] [int] NOT NULL,
+	[CreatedBy] [varchar](100) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UserExpireDate] [datetime] NULL,
+ CONSTRAINT [PK_User_Information] PRIMARY KEY CLUSTERED 
+(
+	[UserInformationID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[UserInformation] ADD  CONSTRAINT [DF_User_Information_User_Status]  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [dbo].[UserInformation] ADD  CONSTRAINT [DF_User_Information_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO 
+----------------------------------------------------------
+ 
+
+------------------------------------------ 
+
+CREATE TABLE [dbo].[PostInformation](
+	[PostID] [int] IDENTITY(1,1) NOT NULL,
+	[PostHead] [varchar](2000) NULL,
+	[PostImage] [varchar](100) NULL,
+	[IsActive] [int] NULL,
+	[CreatedBy] [varchar](100) NULL,
+	[CreatedDate] [datetime] NULL,
+	[UpdatedBy] [varchar](100) NULL,
+	[UpdatedDate] [datetime] NULL,
+ CONSTRAINT [PK_PostInformation] PRIMARY KEY CLUSTERED 
+(
+	[PostID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[PostInformation] ADD  CONSTRAINT [DF_PostInformation_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [dbo].[PostInformation] ADD  CONSTRAINT [DF_PostInformation_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[PostInformation] ADD  CONSTRAINT [DF_PostInformation_UpdatedDate]  DEFAULT (getdate()) FOR [UpdatedDate]
+GO
+
+
+----------------------------------------
+ 
+CREATE TABLE [dbo].[PostFeedback](
+	[PostFeedbackID] [int] IDENTITY(1,1) NOT NULL,
+	[PostID] [int] NOT NULL,
+	[PostComment] [varchar](2000) NULL,
+	[PostLike] [int] NULL,
+	[PostDislike] [int] NULL,
+	[IsActive] [int] NOT NULL,
+	[CreatedBy] [varchar](100) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [varchar](100) NULL,
+	[UpdatedDate] [datetime] NULL,
+ CONSTRAINT [PK_PostFeedback] PRIMARY KEY CLUSTERED 
+(
+	[PostFeedbackID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[PostFeedback] ADD  CONSTRAINT [DF_PostFeedback_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [dbo].[PostFeedback] ADD  CONSTRAINT [DF_PostFeedback_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[PostFeedback] ADD  CONSTRAINT [DF_PostFeedback_UpdatedDate]  DEFAULT (getdate()) FOR [UpdatedDate]
+GO 
