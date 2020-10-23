@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Post";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .thumb-image {
+        /*margin: 0px 0px 0 0px;*/
+        /*width: 490px;*/
+        width: 100%;
+        height: 132px;
+        padding: 5px;
+        border: 2px solid #eae3e3;
+    }
+
+    .file {
+        visibility: hidden;
+        position: absolute;
+    }
+
+    .ums-height35 {
+        height: 35px !important;
+    }
+</style>
+
+ 
+    <div class="portlet-body form">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-globe"></i>Post Information
+                        </div>
+                        <div class="tools"> </div>
+                    </div>
+                    <div class="portlet-body">
+                        <table class="table table-striped table-bordered table-hover sample_2 tblPost" id="aaa">
+                            <thead id="thead_GeneralSetting">
+                                <tr>
+                                    <th> Post </th>
+                                    <th> Comments </th>
+                                    <th> Admin  </th>
+                                    <th> Date  </th>
+                                    <th> FeedBack</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_Post">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+    </div>
+  
+
+ 
+
+<script> 
+
+    $(document).ready(function () {
+        LoadGrid();
+    }); 
+     
+    function LoadGrid() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetPostFeedBack_API", "api/PostAPI/")", 
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                if (data.length > 0) {
+                    console.log(data);
+                    LoadDataGrid(data);
+                }
+                else {
+                    if (data.IsLogin == "1") {
+                        window.location.href = data.redirectUrl;
+                    }
+                    $('#tbody_Post').html("");
+                }
+            }
+        });
+    }
+
+    function LoadDataGrid(data) { 
+        if (data.length > 0) {
+            var item; 
+            var counter = 1;
+            var LikeDislike = "";
+             
+            $.each(data, function (i, obj) {
+                var Odd_Even = ''
+                if (counter == 1) {
+                    Odd_Even = 'odd'
+                    counter = 2;
+                }
+                else {
+                    Odd_Even = 'even';
+                    counter = 1;
+                }
+
+                LikeDislike = '<i class="fa fa-angle-up" aria-hidden="true"></i>' + "  " + obj.PostLike + '<i class="fa fa-angle-down" aria-hidden="true"></i>' + "  " + obj.PostDislike;
+                
+                item += "<tr role='row' class='" + Odd_Even + "'>" +
+                    "<td>" + obj.PostHead + "</td>" +
+                    "<td>" + obj.PostComment + "</td>" +
+                    "<td>" + obj.PostFeedbackCreatedUserName + "</td>" +
+                    "<td>" + obj.PostFeedbackCreatedDate + "</td>" +
+                    "<td>" + LikeDislike + "</td>" +
+                    "</tr>";
+            });
+            $('#tbody_Post').html(item); 
+        }
+        else {
+            $('#tbody_Post').html("");
+        }
+    }
+
+     
+    </script>

@@ -1,0 +1,399 @@
+﻿@{
+    ViewBag.Title = "Default";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .fa {
+        font-size: 50px;
+        cursor: pointer;
+        user-select: none;
+    }
+        .fa:hover {
+            color: darkblue;
+        }
+    .post-body {
+        display: block;
+        margin-bottom: 10px;
+        /*border-bottom: 1px solid #f1f0f0;*/
+        overflow: hidden;
+        padding-bottom: 10px;
+    }
+        .post-body .post-body-user {
+            /*display: inline-block;*/
+            display: flex;
+            margin-bottom: 20px;
+        }
+    .post-body-user .user-img-panel {
+        float: left;
+        border-radius: 50% !important;
+        border: 2px solid #0898ff;
+    }
+    .user-img-panel .user-img {
+        height: 50px;
+        width: 50px;
+    }
+    .post-body-user .user_name {
+        float: left;
+        margin-top: 15px;
+        margin-left: 15px;
+        font-weight: 700;
+    }
+    .post-body-user .post_time {
+        margin-left: 68px;
+        display: block;
+        font-weight: 700;
+        color: #fff;
+        font-size: 10px;
+    }
+    .post-body .user-post {
+        display: inline-block;
+    }
+    .user-post .post_head {
+        margin-bottom: 10px;
+    }
+    .user-post .post_img {
+        border: 1px solid #330101;
+        margin-bottom: 22px;
+    }
+    .post-body .post-feedback {
+    }
+    .post-feedback .like_dislike {
+        float: left;
+    }
+    .post-feedback .feedback_like {
+        float: left;
+        margin-left: 15px;
+        color: #0988f5;
+        font-weight: 700;
+    }
+    .post-feedback .feedback_dislike {
+        float: left;
+        margin-left: 15px;
+        color: red;
+        font-weight: 700;
+    }
+    .post-feedback .feedback_comment {
+        float: right;
+        margin-left: 201px;
+    }
+    .post-body .post-comment-body {
+        display: block;
+        overflow: hidden;
+        margin-top: 40px;
+    }
+    .post-comment-body .post-comment-panel {
+        display: block;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ccc;
+    }
+    .post-comment-panel .post-comment-user-img-panel {
+        float: left;
+        border-radius: 50% !important;
+        border: 1px solid #0898ff;
+        overflow: hidden;
+    }
+    .post-comment-user-img-panel .post-comment-user-img {
+        height: 25px;
+        width: 25px;
+    }
+    .post-comment-panel .post_comment_user_name {
+        margin-left: 36px;
+        padding-top: 6px;
+    }
+    .post-comment-panel .user_post_comment {
+        margin-top: 15px;margin-bottom: 5px;
+    }
+</style>
+
+
+<div style="padding-left:15px !important; padding-right:15px !important;">
+    <div class="row" style="margin-top:10px">
+        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+
+            <div class="post-wrap">
+                @*<div class="post-body">
+                    <div class="post-body-user">
+                        <div class="user-img-panel">
+                            <img alt="" class="img-circle user-img" src="/Content/theme/assets/layouts/layout/img/demo_person.jpg">
+                        </div>
+
+                        <div class="user_name">Md. Azizul Huq</div>
+                        <div class="post_time">15h</div>
+                    </div>
+
+                    <div class="user-post">
+                        <div class="post_head">Here Mudassar Ahmed Khan has explained with an example, how to call (consume) Web API 2 using jQuery AJAX in ASP.Net MVC Razor.</div>
+                        <div class="post_img">
+                            <img src="/Content/Images/brain_station_23.png">
+                        </div>
+                    </div>
+
+                    <div class="post-feedback">
+                        <div class="like_dislike">
+                            <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i>
+                        </div>
+
+                        <div class="feedback_like">10</div>
+                        <div class="feedback_dislike">5</div>
+                        <div class="feedback_comment">Comment</div>
+                    </div>
+
+                    <div class="post-comment-body">
+                        <div class="post-comment-panel">
+                            <div class="post-comment-user-img-panel">
+                                <img alt="" class="img-circle post-comment-user-img" src="/Content/theme/assets/layouts/layout/img/demo_person.jpg">
+                            </div>
+                            <div class="post_comment_user_name">Mamun Hossain</div>
+                            <div class="user_post_comment">Following is a Model class named PersonModel with two properties i.e. Name and DateTime.</div>
+                        </div>
+
+                        <div class="post-comment-panel">
+                            <div class="post-comment-user-img-panel">
+                                <img alt="" class="img-circle post-comment-user-img" src="/Content/theme/assets/layouts/layout/img/demo_person.jpg">
+                            </div>
+                            <div class="post_comment_user_name">Mamun Hossain</div>
+                            <div class="user_post_comment">Following is a Model class named PersonModel with two properties i.e. Name and DateTime.</div>
+                        </div>
+
+                        <div class="post-comment-panel">
+                            <div class="post-comment-user-img-panel">
+                                <img alt="" class="img-circle post-comment-user-img" src="/Content/theme/assets/layouts/layout/img/demo_person.jpg">
+                            </div>
+                            <div class="post_comment_user_name">Mamun Hossain</div>
+                            <div class="user_post_comment">Following is a Model class named PersonModel with two properties i.e. Name and DateTime.</div>
+                        </div>
+                    </div>
+                </div>*@
+
+
+                
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"></div>
+
+    </div>
+</div>
+
+
+<script>
+    
+
+    //var vPostFeedbackID = 0;
+    //$(document).on("click", function (event) {
+    //    var PostID = 0;
+    //    var vComment = "", currentClass = "";
+
+
+    //    currentClass = event.target.className;
+    //    PostID = $('.' + currentClass).parent().attr('class').split('_').pop();
+
+    //    if (currentClass.split('_')[0] == "clsComment") {
+
+    //        vComment = '</br><div class= clsComment_' + PostID + '> <textarea id=txtCommentPost_' + PostID + ' name="w3review" ></textarea></div><div class="btn blue" id=btnCommentSave_' + PostID + '>Save</div><div class="btn default" id=btnRefresh_' + PostID + '>Refresh</div>';
+    //        $('.clsComPost_' + PostID).html(vComment);
+
+    //        $('#btnCommentSave_' + PostID).click(function (e) {
+
+
+    //        });
+    //    }
+    //});
+
+
+    $(document).ready(function () {
+        LoadGrid(); 
+    });
+
+    function LoadGrid() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetPostFeedBack", "Home")",
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            async: false,
+            success: function (data) {
+                var itemIMG = "";
+                var content = "";
+                var vPostID = 0, vPostInnerFlag = 0;
+
+                if (data.JsonData.Data.length > 0) {
+
+                    $.each(data.JsonData.Data, function (i, obj) { 
+
+                        itemIMG = "<img src='data:image/jpg;base64, " + obj.PostImageBase64Bytes + "' style='width:200px; height:200px; /'>";
+
+                        if (vPostID != obj.PostID) { 
+                            content += '' +
+                                '<div class="post-body">' +
+                                    '<div class="post-body-user">' +
+                                        '<div class="user-img-panel">' +
+                                            '<img alt="" class="img-circle user-img" src="/Content/theme/assets/layouts/layout/img/demo_person.jpg">' +
+                                        '</div>' +
+                                        '<div class="user_name">' + obj.PostCreatedUserName + '</div>' +
+                                        '<div class="post_time">15h</div>' +
+                                    '</div>' +
+
+                                    '<div class="user-post">' +
+                                        '<div class="post_head">' + obj.PostHead + '</div>' +
+                                        '<div class="post_img">' + itemIMG + '</div>' +
+                                    '</div>' +
+
+                                    '<div class="post-feedback">' +
+                                        '<div class="like_dislike">' +
+                                            '<i onclick="myFunction(this)" class="fa fa-thumbs-up" id=idtogg_' + obj.PostID + '></i>' +
+                                        '</div>' +
+
+                                        '<div class="feedback_like" id=idlike_' + obj.PostID + '>' + obj.PostLike + '</div>' +
+                                        '<div class="feedback_dislike" id=iddislike_' + obj.PostID + '>' + obj.PostDislike + '</div>' +
+                                        '<div class="feedback_comment">Comment</div>' +
+                                    '</div>';
+
+                            vPostID = obj.PostID;
+                            vPostInnerFlag = 0;
+                        }
+
+                        $.each(data.JsonData.Data, function (j, objInner) {
+
+                            if (vPostID == objInner.PostID && vPostInnerFlag == 0 && objInner.PostComment !="") { 
+                                content += '<div class="post-comment-body">' +
+                                        '<div class="post-comment-panel">' +
+                                            '<div class="post-comment-user-img-panel">' +
+                                                '<img alt="" class="img-circle post-comment-user-img" src="/Content/theme/assets/layouts/layout/img/demo_person.jpg">' +
+                                            '</div>' +
+                                            '<div class="post_comment_user_name">' + objInner.PostFeedbackCreatedUserName + '</div>' +
+                                            '<div class="user_post_comment">' + objInner.PostComment + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>  '; 
+                            }
+                        });
+                        vPostInnerFlag = 1;
+                        vPostID != obj.PostID;
+                    });
+
+                    $('.post-wrap').html(content); 
+                }
+                else {
+                    if (data.IsLogin == "1") {
+                        window.location.href = data.redirectUrl;
+                    } 
+                }
+            }
+        });
+    }
+
+    function myFunction(x) {
+        x.classList.toggle("fa-thumbs-down");
+
+        PostID = x.id.split('_').pop(); 
+
+        if (x.className == "fa fa-thumbs-up fa-thumbs-down") //Like
+        { 
+            var pObj = new Object();
+            pObj.PostID = PostID;
+            pObj.PostLike = 1;
+            pObj.PostDislike = 0;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SavePostFeedback", "Home")',
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                async: false,
+                data: JSON.stringify({ "objItem": pObj }),
+                success: function (data) {
+                    if (parseInt(data.ResultId) > 0) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("GetPostCount", "Home")",
+                            dataType: "JSON",
+                            data: JSON.stringify({ "PostID": PostID }),
+                            contentType: "application/json;charset=utf-8",
+                            async: false,
+                            success: function (data) {
+                                var itemIMG = "";
+                                var content = "";
+                                if (data.JsonData.Data.length > 0) {
+                                    $('#idlike_' + PostID).html('');
+                                    $('#idlike_' + PostID).html(data.JsonData.Data[0].PostLike);
+
+                                    $('#iddislike_' + PostID).html('');
+                                    $('#iddislike_' + PostID).html(data.JsonData.Data[0].PostDislike);
+                                }
+                                else {
+                                    if (data.IsLogin == "1") {
+                                        window.location.href = data.redirectUrl;
+                                    }
+                                }
+                            }
+                        });
+
+                    } else {
+                        if (data.IsLogin == "1") {
+                            window.location.href = data.redirectUrl;
+                        }
+                        ShowMessageBox_OKFailed(data.Message, "Warning", "");
+                    }
+                },
+                error: function (xhr) {
+                    ShowMessageBox_OKFailed("Error : Like operation failed.", "Exception Error", "");
+                }
+            });
+        }
+        else // Dislike
+        {
+            var pObj = new Object();
+            pObj.PostID = PostID;
+            pObj.PostDislike = 1;
+            pObj.PostLike = 0;
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SavePostFeedback", "Home")',
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                async: false,
+                data: JSON.stringify({ "objItem": pObj }),
+                success: function (data) {
+                    if (parseInt(data.ResultId) > 0) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("GetPostCount", "Home")",
+                            dataType: "JSON",
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ "PostID": PostID }),
+                            async: false,
+                            success: function (data) {
+                                var itemIMG = "";
+                                var content = "";
+                                if (data.JsonData.Data.length > 0) {
+                                    $('#idlike_' + PostID).html('');
+                                    $('#idlike_' + PostID).html(data.JsonData.Data[0].PostLike);
+
+                                    $('#iddislike_' + PostID).html('');
+                                    $('#iddislike_' + PostID).html(data.JsonData.Data[0].PostDislike);
+                                }
+                                else {
+                                    if (data.IsLogin == "1") {
+                                        window.location.href = data.redirectUrl;
+                                    }
+                                }
+                            }
+                        });
+
+                    } else {
+                        if (data.IsLogin == "1") {
+                            window.location.href = data.redirectUrl;
+                        }
+                        ShowMessageBox_OKFailed(data.Message, "Warning", "");
+                    }
+                },
+                error: function (xhr) {
+                    ShowMessageBox_OKFailed("Error : Dislike operation failed.", "Exception Error", "");
+                }
+            });
+        }
+    }
+     
+    </script>

@@ -1,0 +1,440 @@
+﻿
+@{
+    ViewBag.Title = "GeneralSetting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .thumb-image {
+        /*margin: 0px 0px 0 0px;*/
+        /*width: 490px;*/
+        width: 100%;
+        height: 132px;
+        padding: 5px;
+        border: 2px solid #eae3e3;
+    }
+
+    .file {
+        visibility: hidden;
+        position: absolute;
+    }
+
+    .ums-height35 {
+        height: 35px !important;
+    }
+</style>
+
+<div class="portlet box blue">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-gift"></i>Submit Post
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse"> </a>
+            <a href="#portlet-config" data-toggle="modal" class="config"> </a>
+            <a href="javascript:;" class="reload"> </a>
+            <a href="javascript:;" class="remove"> </a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <div class="horizontal-form padding-l-r-15">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- BEGIN TAB PORTLET-->
+                    <div class="portlet light bordered">
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label">PostHead</label>
+                                        <input type="text" id="txtPostHead" class="form-control" placeholder="">
+                                        <span class="help-block" id="Err_PostHead">required</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Status</label>
+                                        <select class="form-control" disabled="disabled" id="cboStatus">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        <span class="help-block" id="Err_Status"> required </span>
+                                    </div>
+                                </div> 
+                            </div> 
+
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Post Image</label>
+                                        <div style="background-color:#ffffff; border:2px solid #808080; padding:5px !important; height:186px;">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <div class="form-group" style="margin-bottom:5px;">
+                                                        <input type="file" name="img[]" class="file " id="ProductImage">
+                                                        <div class="input-group col-xs-12">
+                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                                                            <input type="text" class="form-control input-lg ums-height35" disabled placeholder="Upload Image" id="fileUpload" style="height:35px !important;">
+                                                            <span class="input-group-btn">
+                                                                <button style="width:70px; font-size:13px; font-weight:700; padding:0px 0px 0px 0px;" class="browse btn btn-primary input-lg ums-height35" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+                                                            </span>
+                                                        </div>
+                                                        <span class="help-block" id="Err_PostImage"> required </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <div class="form-group">
+                                                        <div id="wrapper">
+                                                            <div id="image-holder">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"></div>
+                            </div>
+
+                            <div class="form-actions right c-btn-conrol">
+                                <div class="btn default" id="btnRefresh">Refresh</div>
+                                <div class="btn blue" id="btnSave">Save</div>
+                                <div class="btn btn-danger" id="btnDelete"><i class="fa fa-window-close"></i> Delete</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="portlet box green">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-globe"></i>Post Information
+                                            </div>
+                                            <div class="tools"> </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <table class="table table-striped table-bordered table-hover sample_2 tblPost" id="aaa">
+                                                <thead id="thead_GeneralSetting">
+                                                    <tr>
+                                                        <th style='display:none;'> PostID </th>
+                                                        <th style='display:none;'> IsActive </th>
+                                                        <th style='display:none;'> PostImage </th>
+                                                        <th style='display:none;'> PostImageBase64Bytes </th>
+
+                                                        <th> Post Head </th>
+                                                        <th> Post Image </th> 
+                                                        <th> Status </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbody_Post">
+                                                    <tr>
+                                                        <td style='display:none;'></td>
+                                                        <td style='display:none;'></td>
+                                                        <td style='display:none;'></td>
+                                                        <td style='display:none;'></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td> 
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td style='display:none;'></td>
+                                                        <td style='display:none;'></td>
+                                                        <td style='display:none;'></td>
+                                                        <td style='display:none;'></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td> 
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END TAB PORTLET-->
+                </div>
+            </div>
+        </div>
+        <!-- END FORM-->
+    </div>
+</div> 
+
+<script src="~/Content/UserDefine/Function.js"></script>
+
+<script>
+    var vPostID = 0;
+
+    $(document).ready(function () {
+        LoadGrid();
+        
+
+        $(".browse").click(function () {
+            var file = $(this).parent().parent().parent().find('.file');
+            file.trigger('click');
+        });
+
+        $(".file").on('change', function () {
+            $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+
+            if (typeof (FileReader) != "undefined") {
+
+                var image_holder = $("#image-holder");
+                image_holder.empty();
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("<img />", {
+                        "src": e.target.result,
+                        "class": "thumb-image"
+                    }).appendTo(image_holder);
+
+                }
+                image_holder.show();
+                reader.readAsDataURL($(this)[0].files[0]);
+            } else {
+                alert("This browser does not support FileReader.");
+            }
+        });
+
+        $('#btnRefresh').click(function (e) {
+            FrmClear();
+        });
+
+        //$('#btnGSExcelToExport').click(function (e) {
+        //    var GeneralAddress = $('#txtExAddress').val();
+        //    window.open('GetExcelExport?GeneralAddress=' + encodeURIComponent(GeneralAddress));
+        //});
+
+
+        $('#btnSave').click(function (e) {
+            e.preventDefault();
+
+            if (IsFrmValid()) {
+                var pObj = new Object();
+                pObj.PostID = vPostID;
+                pObj.PostHead = $("#txtPostHead").val(); 
+                pObj.PostImage = $("#fileUpload").val();
+                pObj.IsActive = $("#cboStatus").val();
+
+                if ($("#btnSave").html() == "Save") {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SavePost", "Home")',
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        async: false,
+                        data: JSON.stringify({ "objItem": pObj }),
+                        success: function (data) {
+                            if (parseInt(data.ResultId) > 0) {
+                                SavePostImage(data.ResultId);
+                                ShowMessageBox_OK(data.Message, "Save", "FrmClear");
+                            } else {
+                                if (data.IsLogin == "1") {
+                                    window.location.href = data.redirectUrl;
+                                }
+                                ShowMessageBox_OKFailed(data.Message, "Warning", "");
+                            }
+                        },
+                        error: function (xhr) {
+                            ShowMessageBox_OKFailed("Error : Save operation failed.", "Exception Error", "");
+                        }
+                    });
+                }
+                else if ($("#btnSave").html() == "Update") {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("UpdatePost", "Home")',
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        async: false,
+                        data: JSON.stringify({ "ObjItem": pObj }),
+                        success: function (data) {
+                            if (parseInt(data.ResultId) > 0) {
+                                SavePostImage(data.ResultId);
+                                ShowMessageBox_OK(data.Message, "Update", "FrmClear");
+                            } else {
+                                if (data.IsLogin == "1") {
+                                    window.location.href = data.redirectUrl;
+                                }
+                                ShowMessageBox_OKFailed(data.Message, "Warning", "");
+                            }
+                        },
+                        error: function (xhr) {
+                            ShowMessageBox_OKFailed("Error : Update operation failed.", "Exception Error", "");
+                        }
+                    });
+                }
+            };
+        });
+
+        $(".tblPost").on('click', 'tr:gt(0)', function (e) {
+            e.preventDefault();
+
+            vPostID = $(this).closest("tr").children("td").eq(0).text();
+            if (vPostID > 0) {
+                $(".tblPost tr:gt(0)").closest("tr").children("td").removeClass("selectedRow");
+                $(this).closest("tr").children("td").addClass("selectedRow");
+
+                $(".tblPost tr:gt(0)").closest("tr").children("td").removeClass("selectedRowColor");
+                $(this).closest("tr").children("td").addClass("selectedRowColor");
+
+                $("#txtPostHead").val($(this).closest("tr").children("td").eq(4).text());//.trigger("change"); 
+                $('#fileUpload').val($(this).closest("tr").children("td").eq(2).text());
+
+                if ($(this).closest("tr").children("td").eq(3).text() != "") {
+                    $("#image-holder").html('<img src="data:image/jpg;base64, ' + $(this).closest("tr").children("td").eq(3).text() + '" class="thumb-image"/>');
+                }
+                else {
+                    $('#fileUpload').val("");
+                    $("#image-holder").html('');
+                }
+                 
+                if ($(this).closest("tr").children("td").eq(1).text() == "1") {
+                    $('#cboStatus').val("1");
+                }
+                else {
+                    $('#cboStatus').val("0");
+                }
+                $("#cboStatus").prop("disabled", false);
+                $('#btnSave').text("Update");
+            }
+        }); 
+    });
+
+    function IsFrmValid() {
+        var isValidItem = true;
+
+        if ($('#txtPostHead').val() == "") {
+            isValidItem = false;
+            $('#Err_PostHead').show();
+        }
+        else {
+            $('#Err_PostHead').hide();
+        } 
+        
+
+        if ($('#fileUpload').val() == "") {
+            isValidItem = false;
+            $('#Err_PostImage').show();
+        }
+        else {
+            $('#Err_PostImage').hide();
+        }
+
+        if (!isValidItem) {
+            // ShowWarningMsg("Please fill the mandatory fields.");
+            alert("Please fill the mandatory fields.");
+        }
+
+        return isValidItem;
+    }
+
+        function FrmClear() {
+            vPostID = 0;
+            $('#txtPostHead').val(""); 
+            $('#txtGSLogo').val("");
+            $("#cboStatus").prop("disabled", true);
+            $('#fileUpload').val("");
+            $('#image-holder').html("");
+            
+            $(".help-block").hide();
+            $('#btnSave').html("Save"); 
+            
+            LoadGrid();
+        }
+
+        function SavePostImage(PostID) {
+            if ($('#fileUpload').val().length > 0) {
+                var file = document.getElementById('ProductImage').files[0];
+                
+                //if (file.size > 204800) {
+                //    alert('File Size Exceeds 200 KB Limit, pls upload image below 200 KB');
+                //    return;
+                //}
+
+                //if (!file.type.match(/image.*/)) {
+                //    alert('Please Upload Image File');
+                //    return;
+                //}
+                //else {
+                var fd = new FormData();
+                fd.append("File", file);
+                fd.append("PostID", PostID);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/Home/SavePostImage");
+                xhr.send(fd);
+                //}
+            }
+        }
+
+        function LoadGrid() {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetPostInformation", "Home")",
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                async: false,
+                success: function (data) { 
+                    if (data.JsonData.Data.length > 0) {
+                        LoadDataGrid(data);
+                    }
+                    else {
+                        if (data.IsLogin == "1") {
+                            window.location.href = data.redirectUrl;
+                        }
+                        $('#tbody_Post').html("");
+                    }
+                }
+            });
+        }
+
+    function LoadDataGrid(data) { 
+        if (data.JsonData.Data.length > 0) {
+            var item;
+            var itemIMG = ""; 
+            var counter = 1;
+
+            $.each(data.JsonData.Data, function (i, obj) { 
+                var Odd_Even = ''
+                if (counter == 1) {
+                    Odd_Even = 'odd'
+                    counter = 2;
+                }
+                else {
+                    Odd_Even = 'even';
+                    counter = 1;
+                }
+
+                if (obj.LogoBase64Bytes == "") {
+                    itemIMG = "<img src='../images/emptyImg/FemaleEmptyImg.jpg' style='width:60px; height:60px; /'>"; 
+                }
+                else {
+                    itemIMG = "<img src='data:image/jpg;base64, " + obj.PostImageBase64Bytes + "' style='width:60px; height:60px; /'>";
+                }
+
+                item += "<tr role='row' class='" + Odd_Even + "'>" +
+                    "<td style='display:none;'>" + obj.PostID + "</td>" +
+                    "<td style='display:none;'>" + obj.IsActive + "</td>" +
+                    "<td style='display:none;'>" + obj.PostImage + "</td>" +
+                    "<td style='display:none;'>" + obj.PostImageBase64Bytes + "</td>" +
+                    "<td>" + obj.PostHead + "</td>" + 
+                    "<td>" + itemIMG + "</td>" +
+                    "<td>" + obj.Status + "</td>" +
+                    "</tr>";
+            });  
+            $('#tbody_Post').html(item);
+            //LoadJqueryDataTable("General Setting Info", "GeneralSetting", "200", "10", "4,5,6,7,8");
+        }
+        else {
+            $('#tbody_Post').html("");
+        }
+    }
+
+     
+    </script>
